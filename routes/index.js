@@ -1,14 +1,23 @@
-import { Router } from 'express';
-import appRouter from './app';
-import authRouter from './auth';
-import usersRouter from './users';
-import filesRouter from './files';
+const express = require('express');
 
-// App router
-const router = Router();
-router.use(appRouter);
-router.use(authRouter);
-router.use(usersRouter);
-router.use(filesRouter);
+const router = express.Router();
+const AppController = require('../controllers/AppController');
+const UsersController = require('../controllers/UsersController');
+const AuthController = require('../controllers/AuthController');
+const FilesController = require('../controllers/FilesController');
 
-export default router;
+router.get('/status', AppController.getStatus);
+router.get('/stats', AppController.getStats);
+router.post('/users', UsersController.postNew);
+router.get('/connect', AuthController.getConnect);
+router.get('/disconnect', AuthController.getDisconnect);
+router.get('/users/me', UsersController.getMe);
+
+// Files routes
+router.post('/files', FilesController.postUpload);
+router.get('/files/:id', FilesController.getShow);
+router.put('/files/:id/publish', FilesController.putPublish);
+router.put('/files/:id/unpublish', FilesController.putUnpublish);
+
+
+module.exports = router;
